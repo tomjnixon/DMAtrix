@@ -1,0 +1,5 @@
+.pioenvs
+.piolibdeps
+builddir
+subprojects/eigen-eigen*
+subprojects/packagecache
