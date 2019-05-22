@@ -49,9 +49,6 @@ expanded to support more panel geometries, rotation, multiple panels etc.
 
 ### Buffer Model
 
-The buffer model computes and stores the waveform used to drive a particular
-display in
-
 The buffer model represents the waveform used to drive the display. It decides
 how the sub-frames should be packed together, resulting in an offset for each
 subframe and the total amount of DMA memory required. It has methods to
