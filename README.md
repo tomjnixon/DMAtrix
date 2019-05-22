@@ -92,7 +92,7 @@ to implement double buffering.
 The interface to DMA drivers is designed to deal with the quirks of the ESP32
 I2S hardware, but this is quite quirky so it should be possible to implement
 the same interface on other platforms. The main affordance is that the type
-representing the buffer id secided by the DMA class (given the number of bits
+representing the buffer is decided by the DMA class (given the number of bits
 required). This allows a class to be used instead of a raw pointer, which can
 implement reordering of bits required by odd DMA hardware.
 
