@@ -5,7 +5,7 @@ add_global_arguments('-O2', language:'cpp')
 
 eigen = subproject('eigen').get_variable('eigen_dep')
 
-incdir = include_directories('include')
+incdir = include_directories('src')
 
 executable('dump_buf', 'examples/dump_buf.cpp',
     include_directories : incdir)
