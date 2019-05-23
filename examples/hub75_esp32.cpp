@@ -7,7 +7,7 @@ using namespace DMAtrix;
 
 using D = FullDisplay<32, 64, 4, RGBOrder::RRGGBB>;
 // clk, oe, le, {A, B, C, D}, {R1, R2, G1, G2, B1, B2}
-Pins<D> pins{23, 22, 4, {13, 12, 14, 27}, {21, 19, 18, 5, 17, 16}};
+Pins<D> pins{23, 22, 4, {13, 12, 14, 27}, {26, 25, 33, 32, 5, 18}};
 DisplayDriver<D, ESP32I2SDMA, true> driver(pins, 4, 8);
 
 long unsigned int last_print_time;
