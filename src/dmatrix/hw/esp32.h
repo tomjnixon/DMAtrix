@@ -85,23 +85,33 @@ namespace DMAtrix {
       }
     };
 
-    // 'typedef struct' required to silence warning:
-    // 'ISRInfo' has a field 'ISRInfo::dev' whose type uses the anonymous
-    // namespace
-    typedef struct {
-      i2s_dev_t *dev;
+    i2s_dev_t *i2s_dev(size_t num) {
+      assert(num == 0 || num == 1);
+
+      return num ? &I2S1 : &I2S0;
+    }
+
+    struct ISRInfo {
+      size_t dev;
       volatile bool flip_done;
-    } ISRInfo;
+    };
 
     void IRAM_ATTR i2s_isr_ext(void *arg) {
       ISRInfo *isr_info = (ISRInfo *)arg;
 
-      isr_info->dev->int_clr.out_eof = 1;
+      i2s_dev_t *dev = isr_info->dev ? &I2S1 : &I2S0;
+
+      dev->int_clr.out_eof = 1;
 
       isr_info->flip_done = true;
     }
 
   }
+
+  struct ESP32Config {
+    size_t dev = 0;
+    int clkspeed_hz = 20000000;
+  };
 
   template <size_t num_pins, size_t num_buffers>
   struct ESP32I2SDMA {
@@ -111,10 +121,7 @@ namespace DMAtrix {
         typename std::conditional_t<num_pins <= 16, uint16_t, uint32_t>>;
     std::array<esp32::DMABuffer<dtype>, num_buffers> buffers;
 
-    struct Config {
-      i2s_dev_t *dev = &I2S1;
-      int clkspeed_hz = 20000000;
-    };
+    using Config = ESP32Config;
 
     esp32::ISRInfo isr_info;
 
@@ -130,7 +137,7 @@ namespace DMAtrix {
                size_t size) {
       for (auto &buffer : buffers) buffer.setup(size);
 
-      i2s_dev_t *dev = config.dev;
+      i2s_dev_t *dev = esp32::i2s_dev(config.dev);
       constexpr size_t bits = sizeof(dtype) * 8;
 
       // Figure out which signal numbers to use for routing
@@ -235,7 +242,7 @@ namespace DMAtrix {
       dev->conf.tx_fifo_reset = 0;
       dev->conf.rx_fifo_reset = 0;
 
-      isr_info.dev = dev;
+      isr_info.dev = config.dev;
       isr_info.flip_done = false;
 
       // setup I2S Interrupt
