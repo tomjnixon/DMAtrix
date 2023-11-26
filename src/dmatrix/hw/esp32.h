@@ -39,7 +39,7 @@ namespace DMAtrix {
     inline void gpio_setup_out(int gpio, int sig) {
       if (gpio == -1) return;
       PIN_FUNC_SELECT(GPIO_PIN_MUX_REG[gpio], PIN_FUNC_GPIO);
-      gpio_set_direction((gpio_num_t)gpio, (gpio_mode_t)GPIO_MODE_DEF_OUTPUT);
+      gpio_set_direction((gpio_num_t)gpio, GPIO_MODE_OUTPUT);
       gpio_matrix_out((gpio_num_t)gpio, sig, false, false);
     }
 
