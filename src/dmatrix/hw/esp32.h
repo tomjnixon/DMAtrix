@@ -74,12 +74,12 @@ namespace DMAtrix {
       }
 
       void setup(size_t size) {
-        buf = (T *)heap_caps_malloc(sizeof(T) * size, MALLOC_CAP_DMA);
+        buf = (T *)heap_caps_malloc(sizeof(T) * size, MALLOC_CAP_INTERNAL | MALLOC_CAP_DMA);
         assert(buf);
 
         desccount = (size * sizeof(T) + (DMA_MAX - 1)) / DMA_MAX;
         dmadesc = (lldesc_t *)heap_caps_malloc(desccount * sizeof(lldesc_t),
-                                               MALLOC_CAP_DMA);
+                                               MALLOC_CAP_INTERNAL | MALLOC_CAP_DMA);
         assert(dmadesc);
 
         setup_descriptors(dmadesc, desccount, (uint8_t *)buf, sizeof(T) * size);
