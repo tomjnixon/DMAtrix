@@ -4,6 +4,7 @@
 #include <driver/periph_ctrl.h>
 #include <esp_heap_caps.h>
 #include <esp_intr_alloc.h>
+#include <rom/gpio.h>
 #include <rom/lldesc.h>
 #include <soc/gpio_periph.h>
 #include <soc/gpio_sig_map.h>
