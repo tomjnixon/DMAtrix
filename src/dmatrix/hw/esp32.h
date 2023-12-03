@@ -117,9 +117,7 @@ namespace DMAtrix {
   template <size_t num_pins, size_t num_buffers>
   struct ESP32I2SDMA {
     static_assert(num_pins <= 16, "DMA in 32 bit mode is not yet supported");
-    using dtype = typename std::conditional_t<
-        num_pins <= 8, uint8_t,
-        typename std::conditional_t<num_pins <= 16, uint16_t, uint32_t>>;
+    using dtype = typename std::conditional_t<num_pins <= 16, uint16_t, uint32_t>;
     std::array<esp32::DMABuffer<dtype>, num_buffers> buffers;
 
     using Config = ESP32Config;
@@ -175,24 +173,14 @@ namespace DMAtrix {
       dev->conf2.val = 0;
       dev->conf2.lcd_en = 1;
 
-      // Enable "One datum will be written twice in LCD mode" - for some reason,
-      // if we don't do this in 8-bit mode, data is updated on half-clocks not
-      // clocks
-      if (bits == 8) dev->conf2.lcd_tx_wrx2_en = 1;
-
       dev->sample_rate_conf.val = 0;
       dev->sample_rate_conf.rx_bits_mod = bits;
       dev->sample_rate_conf.tx_bits_mod = bits;
       // ToDo: Unsure about what this does...
       dev->sample_rate_conf.rx_bck_div_num = 4;
 
-      // because conf2.lcd_tx_wrx2_en is set for 8-bit mode, the clock speed is
-      // doubled, drop it in half here
-      if (bits == 8)
-        dev->sample_rate_conf.tx_bck_div_num = 2;
-      else
-        // datasheet says this must be 2 or greater (but 1 seems to work)
-        dev->sample_rate_conf.tx_bck_div_num = 1;
+      // datasheet says this must be 2 or greater (but 1 seems to work)
+      dev->sample_rate_conf.tx_bck_div_num = 1;
 
       dev->clkm_conf.val = 0;
       dev->clkm_conf.clka_en = 0;
