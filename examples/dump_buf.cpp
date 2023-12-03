@@ -1,5 +1,6 @@
 #include <dmatrix/buffer_model.h>
 #include <dmatrix/display_model.h>
+
 #include <cassert>
 #include <iostream>
 

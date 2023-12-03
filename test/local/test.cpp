@@ -1,8 +1,10 @@
 #include <dmatrix/buffer_model.h>
 #include <dmatrix/display_model.h>
 #include <dmatrix/driver.h>
+
 #include <Eigen/Core>
 #include <unsupported/Eigen/CXX11/Tensor>
+
 #include "catch.hpp"
 
 using namespace DMAtrix;
